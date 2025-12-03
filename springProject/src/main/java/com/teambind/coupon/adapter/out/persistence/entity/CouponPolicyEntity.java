@@ -70,6 +70,10 @@ public class CouponPolicyEntity extends BaseEntity {
     private Integer maxIssueCount;
     private Integer maxUsagePerUser;
 
+    @Column(name = "current_issue_count")
+    @Builder.Default
+    private Integer currentIssueCount = 0; // 현재 발급 수량
+
     @Column(nullable = false)
     @Builder.Default
     private boolean isActive = true;

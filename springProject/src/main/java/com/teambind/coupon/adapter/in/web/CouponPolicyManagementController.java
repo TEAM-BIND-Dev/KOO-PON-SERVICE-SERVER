@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -34,7 +33,6 @@ public class CouponPolicyManagementController {
      * @return 수정 결과
      */
     @PatchMapping("/{policyId}/remaining-quantity")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UpdateCouponPolicyRemainingQuantityResponse> updateRemainingQuantity(
             @PathVariable Long policyId,
             @Valid @RequestBody UpdateCouponPolicyRemainingQuantityRequest request) {
