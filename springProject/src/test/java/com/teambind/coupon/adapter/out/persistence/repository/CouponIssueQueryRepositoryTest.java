@@ -230,8 +230,19 @@ class CouponIssueQueryRepositoryTest {
 
     // 테스트 데이터 생성 메서드들
     private CouponPolicyEntity createCouponPolicy(String name, Long[] productIds) {
+        // Snowflake ID 생성 (간단한 구현)
+        long snowflakeId = System.currentTimeMillis() * 1000 + name.hashCode();
+
+        // 적용 가능 상품 규칙 생성
+        CouponPolicyEntity.ItemApplicableRuleJson applicableRule =
+                CouponPolicyEntity.ItemApplicableRuleJson.builder()
+                        .allItemsApplicable(false)
+                        .applicableItemIds(java.util.Arrays.asList(productIds))
+                        .build();
+
         return couponPolicyRepository.save(
                 CouponPolicyEntity.builder()
+                        .id(snowflakeId)
                         .couponName(name)
                         .couponCode("CODE_" + name)
                         .description("테스트 쿠폰")
@@ -239,14 +250,13 @@ class CouponIssueQueryRepositoryTest {
                         .discountValue(BigDecimal.TEN)
                         .minimumOrderAmount(BigDecimal.valueOf(10000))
                         .maxDiscountAmount(BigDecimal.valueOf(5000))
-                        .applicableProductIds(productIds)
+                        .applicableRule(applicableRule)
                         .distributionType(DistributionType.CODE)
                         .validFrom(LocalDateTime.now().minusDays(1))
                         .validUntil(LocalDateTime.now().plusDays(30))
                         .maxIssueCount(100)
                         .maxUsagePerUser(3)
                         .isActive(true)
-                        .createdAt(LocalDateTime.now())
                         .createdBy(1L)
                         .build()
         );
